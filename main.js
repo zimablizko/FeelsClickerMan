@@ -1,33 +1,64 @@
+var gold = {
+	name:'gold',
+	total:0,
+	perClick:1,
+	perTick:0,
+	perClickCost:10
+}
 var gameData = {
-  gold: 0,
-  goldPerClick: 1,
-  goldPerClickCost: 10
+	//gold:gold
 }
 
 function mineGold() {
-  gameData.gold += gameData.goldPerClick
-  document.getElementById("goldMined").innerHTML = gameData.gold + " Gold Mined"
+	gameData.gold.total += gameData.gold.perClick
+	updateGameData()
+}
+
+function mineGoldPerTick() {
+	gameData.gold.total += gameData.gold.perTick
+	updateGameData()
 }
 
 function buyGoldPerClick() {
-  if (gameData.gold >= gameData.goldPerClickCost) {
-    gameData.gold -= gameData.goldPerClickCost
-    gameData.goldPerClick += 1
-    gameData.goldPerClickCost *= 2
-    document.getElementById("goldMined").innerHTML = gameData.gold + " Gold Mined"
-    document.getElementById("perClickUpgrade").innerHTML = "Upgrade Pickaxe (Currently Level " + gameData.goldPerClick + ") Cost: " + gameData.goldPerClickCost + " Gold"
+  if (gameData.gold.total >= gameData.gold.perClickCost) {
+    gameData.gold.total -= gameData.gold.perClickCost
+    gameData.gold.perClick += 1
+    gameData.gold.perClickCost *= 2.25
+    updateGameData()
   }
 }
 
+function updateGameData(){
+	  document.getElementById("goldMined").innerHTML = prettify(gameData.gold.total)
+	  document.getElementById("goldPerTime").innerHTML = prettify(gameData.gold.perTick)
+	  document.getElementById("goldPerClick").innerHTML = prettify(gameData.gold.perClick)
+	  document.getElementById("perClickUpgrade").innerHTML = "Upgrade Pickaxe (Level " + gameData.gold.perClick + ")"
+	  document.getElementById("perClickUpgradeCost").innerHTML = prettify(gameData.gold.perClickCost)
+  
+}
+
+function resetGameData(){
+	localStorage.removeItem('goldMinerSave')
+	gameData.gold = gold
+	updateGameData()
+}
+
+function prettify(input){
+	return input.toFixed(1).toString()
+}
+
 var mainGameLoop = window.setInterval(function() {
-  mineGold()
+  mineGoldPerTick()
 }, 1000)
 
 var saveGameLoop = window.setInterval(function() {
   localStorage.setItem('goldMinerSave', JSON.stringify(gameData))
-}, 15000)
+}, 5000)
 
-var savegame = JSON.parse(localStorage.getItem("goldMinerSave"))
-if (savegame !== null) {
-  gameData = savegame
+saveData = JSON.parse(localStorage.getItem("goldMinerSave"))
+if (saveData !== null) {
+	gameData = saveData
+	updateGameData()
+}else{
+	resetGameData()
 }

@@ -5,9 +5,24 @@
     <title>Gold Miner</title>
   </head>
   <body>
-    <p id="goldMined">0 Gold Mined</p>
-    <button onclick="mineGold()">Mine Gold</button>
-    <button onclick="buyGoldPerClick()" id="perClickUpgrade">Upgrade Pickaxe (Currently Level 1) Cost: 10 Gold</button>
+	<table>
+		<tr>
+			<td>
+				<p>Gold: <span id="goldMined">0</span> (+<span id="goldPerTime">0</span>/sec) <button onclick="mineGold()">Mine Gold (+<span id="goldPerClick">0</span>)</button></p>
+				<h2>Upgrades</h2>
+				<p><button onclick="buyGoldPerClick()" id="perClickUpgrade">Upgrade Pickaxe (Level 1)</button> Cost: <span id="perClickUpgradeCost">10</span> Gold</p>
+			</td><td>
+				<h2>Units</h2>
+			</td>
+			<td>
+				<h2>Structures</h2>
+			</td>
+		</tr>
+	</table>
+	<br>
+	<br>
+	<br>
+    <button onclick="resetGameData()" id="resetGameData">RESET</button>
     <script src="main.js" charset="utf-8" type="text/javascript"></script>
   </body>
 </html>
