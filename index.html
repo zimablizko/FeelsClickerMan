@@ -8,14 +8,19 @@
 	<table>
 		<tr>
 			<td>
-				<p>Gold: <span id="goldMined">0</span> (+<span id="goldPerTime">0</span>/sec) <button onclick="mineGold()">Mine Gold (+<span id="goldPerClick">0</span>)</button></p>
+				<p>Gold: <span id="goldTotal">0</span> (+<span id="goldPerTick">0</span>/sec) <button onclick="clickResource(gameData.gold)">Mine Gold (+<span id="goldPerClick">0</span>)</button></p>
+				<p>Food: <span id="foodTotal">0</span> (+<span id="foodPerTick">0</span>/sec) <button onclick="clickResource(gameData.food)">Harvest Food (+<span id="foodPerClick">0</span>)</button></p>
+				<p>Memes: <span id="memesTotal">0</span> </p>
+				
 				<h2>Upgrades</h2>
 				<p><button onclick="buyGoldPerClick()" id="perClickUpgrade">Upgrade Pickaxe (Level 1)</button> Cost: <span id="perClickUpgradeCost">10</span> Gold</p>
 			</td><td>
 				<h2>Units</h2>
+				<p>Workers: <span id="workerTotal">0</span> <button id="createWorker" onclick="createUnit(gameData.worker)">Create Worker </button> Cost: <span id="workerCost">10</span> Gold</p>
 			</td>
 			<td>
 				<h2>Structures</h2>
+				<p>Mines: <span id="mineTotal">0</span> <button id="createMine" onclick="createStructure(gameData.mine)">Build Mine </button> Cost: <span id="mineCostGold">10</span> Gold, <span id="mineCostWorker">0</span> Worker</p>
 			</td>
 		</tr>
 	</table>
