@@ -1,0 +1,15 @@
+.upgrade-but-container{
+    display: inline-block;
+    padding: 8px;
+}
+.upgrade-but{
+    padding: 15px;
+}
+.upgrade-info-container{
+    display: inline-block;
+    padding: 8px;
+}
+
+.cost-text{
+    font-style: italic;
+}

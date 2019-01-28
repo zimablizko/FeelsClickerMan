@@ -357,33 +357,33 @@ function updateGameData() {
     //WORKERS
     document.getElementById("workerTotal").innerHTML = gameData.worker.total
     //document.getElementById("workerCostGold").innerHTML = prettify(gameData.worker.require.gold)
-    document.getElementById("workerCostFood").innerHTML = prettify(gameData.worker.require.food)
+    document.getElementById("workerCost").innerHTML = " Cost: "+prettify(gameData.worker.require.food,0)+ " Food"
     //FARMERS
     document.getElementById("farmerTotal").innerHTML = gameData.farmer.total
-    document.getElementById("farmerCostWood").innerHTML = prettify(gameData.farmer.require.wood)
+    document.getElementById("farmerCost").innerHTML = " Cost: "+prettify(gameData.farmer.require.wood,0)+ " Wood"
     //MINERS
     document.getElementById("minerTotal").innerHTML = gameData.miner.total
-    document.getElementById("minerCostWood").innerHTML = prettify(gameData.miner.require.wood)
-    //WOODCUTTER
+    document.getElementById("minerCost").innerHTML = " Cost: "+prettify(gameData.miner.require.wood,0)+ " Wood"
+    //WOODCUTTERS
     document.getElementById("woodcutterTotal").innerHTML = gameData.woodcutter.total
-    document.getElementById("woodcutterCostWood").innerHTML = prettify(gameData.woodcutter.require.wood)
+    document.getElementById("woodcutterCost").innerHTML = " Cost: "+prettify(gameData.woodcutter.require.wood,0)+ " Wood"
     //MINE
     //document.getElementById("mineTotal").innerHTML = gameData.mine.total
     //document.getElementById("mineCostGold").innerHTML = prettify(gameData.mine.require.gold)
     //document.getElementById("mineCostWorker").innerHTML = gameData.mine.require.worker
     // TENT
     document.getElementById("tentTotal").innerHTML = gameData.tent.total
-    document.getElementById("tentCost").innerHTML =" Cost: "+prettify(gameData.tent.require.wood)+ " Wood, "+prettify(gameData.tent.require.stone)+ " Stone"
+    document.getElementById("tentCost").innerHTML =" Cost: "+prettify(gameData.tent.require.wood,0)+ " Wood, "+prettify(gameData.tent.require.stone,0)+ " Stone"
     document.getElementById("tentCostWorker").innerHTML = "Require: "+gameData.tent.require.worker + " Workers"
     // STORAGE
     document.getElementById("storageTotal").innerHTML = gameData.storage.total
-    document.getElementById("storageCost").innerHTML =" Cost: "+prettify(gameData.storage.require.wood)+ " Wood, "+prettify(gameData.storage.require.stone)+ " Stone"
+    document.getElementById("storageCost").innerHTML =" Cost: "+prettify(gameData.storage.require.wood,0)+ " Wood, "+prettify(gameData.storage.require.stone,0)+ " Stone"
     document.getElementById("storageCostWorker").innerHTML = " Require: "+gameData.storage.require.worker + " Workers"
 
     //UPGRADES
     updateUpgradesData()
-    document.getElementById("huntingCost").innerHTML = " Cost: "+ gameData.upgrades.hunting.require.food+ " Food"
-    document.getElementById("safekeepingCost").innerHTML = " Cost: "+ gameData.upgrades.safekeeping.require.wood+ " Wood, "+gameData.upgrades.safekeeping.require.stone+ " Stone"
+    document.getElementById("huntingCost").innerHTML = " Cost: "+ prettify(gameData.upgrades.hunting.require.food,0)+ " Food"
+    document.getElementById("safekeepingCost").innerHTML = " Cost: "+ prettify(gameData.upgrades.safekeeping.require.wood,0)+ " Wood, "+prettify(gameData.upgrades.safekeeping.require.stone,0)+ " Stone"
     //
     updateAccessData()
 }
@@ -533,8 +533,8 @@ if (saveData !== null) {
 }
 
 //UTILS
-function prettify(input) {
-    return input.toFixed(1).toString()
+function prettify(input, digits=1) {
+    return input.toFixed(digits).toString()
 }
 
 function clone(obj) {
