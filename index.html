@@ -1,33 +1,77 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
-  <head>
+<head>
     <meta charset="utf-8">
     <title>Gold Miner</title>
-  </head>
-  <body>
-	<table>
-		<tr>
-			<td>
-				<p>Gold: <span id="goldTotal">0</span> (+<span id="goldPerTick">0</span>/sec) <button onclick="clickResource(gameData.gold)">Mine Gold (+<span id="goldPerClick">0</span>)</button></p>
-				<p>Food: <span id="foodTotal">0</span> (+<span id="foodPerTick">0</span>/sec) <button onclick="clickResource(gameData.food)">Harvest Food (+<span id="foodPerClick">0</span>)</button></p>
-				<p>Memes: <span id="memesTotal">0</span> </p>
-				
-				<h2>Upgrades</h2>
-				<p><button onclick="buyGoldPerClick()" id="perClickUpgrade">Upgrade Pickaxe (Level 1)</button> Cost: <span id="perClickUpgradeCost">10</span> Gold</p>
-			</td><td>
-				<h2>Units</h2>
-				<p>Workers: <span id="workerTotal">0</span> <button id="createWorker" onclick="createUnit(gameData.worker)">Create Worker </button> Cost: <span id="workerCost">10</span> Gold</p>
-			</td>
-			<td>
-				<h2>Structures</h2>
-				<p>Mines: <span id="mineTotal">0</span> <button id="createMine" onclick="createStructure(gameData.mine)">Build Mine </button> Cost: <span id="mineCostGold">10</span> Gold, <span id="mineCostWorker">0</span> Worker</p>
-			</td>
-		</tr>
-	</table>
-	<br>
-	<br>
-	<br>
+</head>
+<body>
+<div style="padding:20px; float:left">
+    <h2>Resources</h2>
+
+    <p>Food: <span id="foodTotal">0</span> (<span id="foodPerTick">0</span>/sec)
+        <button onclick="clickResource(gameData.food)">Harvest (+<span id="foodPerClick">0</span>)</button>
+    </p>
+    <p>Wood: <span id="woodTotal">0</span> (<span id="woodPerTick">0</span>/sec)
+        <button onclick="clickResource(gameData.wood)">Harvest (+<span id="woodPerClick">0</span>)</button>
+    </p>
+    <p>Stone: <span id="stoneTotal">0</span> (<span id="stonePerTick">0</span>/sec)
+        <button onclick="clickResource(gameData.stone)">Harvest (+<span id="stonePerClick">0</span>)</button>
+    </p>
+    <p>Gold: <span id="goldTotal">0</span> (<span id="goldPerTick">0</span>/sec)
+        <!--<button onclick="clickResource(gameData.gold)">Mine (+<span id="goldPerClick">0</span>)</button>--></p>
+    <p>Memes: <span id="memesTotal">0</span></p>
+
+    <h2>Upgrades</h2>
+    <p id="huntingLine"><button onclick="getUpgrade('hunting')" id="huntingBut">Hunting</button><span id="huntingCost"></span> </p>
+    <p id="safekeepingLine"><button onclick="getUpgrade('safekeeping')" id="safekeepingBut">Safekeeping</button> <span id="safekeepingCost"></span></p>
+    <!--<p><button onclick="buyGoldPerClick()" id="perClickUpgrade">Upgrade Pickaxe (Level 1)</button> Cost: <span id="perClickUpgradeCost">10</span> Gold</p>-->
+</div>
+<div style="padding:20px; float:left">
+    <h2>Units (Population: <span id="populationTotal">0</span>)</h2>
+    <p>Workers: <span id="workerTotal">0</span>
+        <button id="createWorker" onclick="createUnit(gameData.worker)">Create</button>
+        Cost: <span id="workerCostFood">10</span> Food
+    </p>
+    <p>Farmers: <span id="farmerTotal">0</span>
+        <button id="fireFarmer" onclick="fireUnit(gameData.farmer)">-</button>
+        <button id="createFarmer" onclick="createUnit(gameData.farmer)">+</button>
+        Cost: <span id="farmerCostWood">10</span> Wood, <span id="farmerCostWorker">1</span> Worker
+    </p>
+    <p>Woodcutters: <span id="woodcutterTotal">0</span>
+        <button id="fireWoodcutter" onclick="fireUnit(gameData.woodcutter)">-</button>
+        <button id="createWoodcutter" onclick="createUnit(gameData.woodcutter)">+</button>
+        Cost: <span id="woodcutterCostWood">10</span> Wood, <span id="woodcutterCostWorker">1</span> Worker
+    </p>
+    <p>Miners: <span id="minerTotal">0</span>
+        <button id="fireMiner" onclick="fireUnit(gameData.miner)">-</button>
+        <button id="createMiner" onclick="createUnit(gameData.miner)">+</button>
+        Cost: <span id="minerCostWood">10</span> Wood, <span id="minerCostWorker">1</span> Worker
+    </p>
+</div>
+<div style="padding:20px; float:left">
+    <h2>Structures</h2>
+    <p id="tentLine">Tent: <span id="tentTotal">0</span>
+        <button id="tentBut" onclick="createStructure(gameData.tent)">Build</button>
+        <span id="tentCost">10</span> | <span id="tentCostWorker">0</span>
+    </p>
+    <p id="storageLine">Storage: <span id="storageTotal">0</span>
+        <button id="storageBut" onclick="createStructure(gameData.storage)">Build</button>
+        <span id="storageCost">10</span> | <span id="storageCostWorker">0</span>
+    </p>
+    <!--<p>Mines: <span id="mineTotal">0</span>
+        <button id="createMine" onclick="createStructure(gameData.mine)">Build</button>
+        Cost: <span id="mineCostGold">10</span> Gold, <span id="mineCostWorker">0</span> Worker
+    </p>-->
+</div>
+</div>
+<div style="padding:20px;">
+    <h2>Settings</h2>
     <button onclick="resetGameData()" id="resetGameData">RESET</button>
-    <script src="main.js" charset="utf-8" type="text/javascript"></script>
-  </body>
+</div>
+<br>
+<br>
+<br>
+
+<script src="main.js" charset="utf-8" type="text/javascript"></script>
+</body>
 </html>
