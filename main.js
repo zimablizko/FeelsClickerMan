@@ -301,8 +301,9 @@ function clickResource(resource) {
 
 function resourcePerTick(resource) {
     if (resource.total < resource.max) {
-        if (resource == gameData.gold)
+        if (resource == gameData.gold) {
             resource.perTick = gameData.mine.effect.goldPerTick * gameData.mine.total
+        }
         else if (resource == gameData.food) {
             var farmerMod = 1;
             //Осенний бонус к фермерам
@@ -319,18 +320,20 @@ function resourcePerTick(resource) {
                 killUnit(rndUnit)
                 addMessage(rndUnit.name + " dead by starving death.")
             }
-        } else if (resource == gameData.wood)
+        } else if (resource == gameData.wood){
             if (gameData.world.forest > 0) {
                 resource.perTick = gameData.woodcutter.effect.woodPerTick * gameData.woodcutter.total * gameData.population.globalMod
                 gameData.world.forest -= resource.perTick / 10;
                 gameData.world.lands += resource.perTick / 10;
-            } else if (resource == gameData.stone)
-                if (gameData.world.rocks > 0) {
-                    resource.perTick = gameData.miner.effect.stonePerTick * gameData.miner.total * gameData.population.globalMod
-                    gameData.world.rocks -= resource.perTick / 100;
-                    gameData.world.lands += resource.perTick / 100;
-                } else
-                    resource.perTick = 0
+            }
+        }
+           else if (resource == gameData.stone) {
+            if (gameData.world.rocks > 0) {
+                resource.perTick = gameData.miner.effect.stonePerTick * gameData.miner.total * gameData.population.globalMod
+                gameData.world.rocks -= resource.perTick / 100;
+                gameData.world.lands += resource.perTick / 100;
+            }
+        }
         resource.total += resource.perTick
         checkResourceBounds(resource)
         updateGameData()
