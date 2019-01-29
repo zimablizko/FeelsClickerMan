@@ -26,6 +26,8 @@
     <h2>Upgrades</h2>
     <div id="huntingLine"> <div class="upgrade-but-container"><button class="upgrade-but" onclick="getUpgrade('hunting')" id="huntingBut">Hunting</button></div> <div class="upgrade-info-container">Unlock Hunters<br><span class="cost-text" id="huntingCost"></span></div></div>
     <div id="safekeepingLine"> <div class="upgrade-but-container"><button class="upgrade-but" onclick="getUpgrade('safekeeping')" id="safekeepingBut">Safekeeping</button></div> <div class="upgrade-info-container">Unlock Storages<br><span class="cost-text" id="safekeepingCost"></span></div></div>
+    <div id="masonryLine"> <div class="upgrade-but-container"><button class="upgrade-but" onclick="getUpgrade('masonry')" id="masonryBut">Masonry</button></div> <div class="upgrade-info-container">Unlock new structures<br><span class="cost-text" id="masonryCost"></span></div></div>
+    <div id="exploringLine"> <div class="upgrade-but-container"><button class="upgrade-but" onclick="getUpgrade('exploring')" id="exploringBut">Exploring</button></div> <div class="upgrade-info-container">Unlock Scouting<br><span class="cost-text" id="exploringCost"></span></div></div>
     <!--<p><button onclick="buyGoldPerClick()" id="perClickUpgrade">Upgrade Pickaxe (Level 1)</button> Cost: <span id="perClickUpgradeCost">10</span> Gold</p>-->
 </div>
 <div class="block">
@@ -54,6 +56,11 @@
         <button id="createMiner" onclick="createUnit(gameData.miner)">+</button>
         <span class="cost-text" id="minerCost"></span>
     </p>
+    <div id="ordersBlock">
+    <h2>Orders</h2>
+    <p><button id="createScout" onclick="">Send Scout</button>
+        <span class="cost-text" id="scoutCost"></span>
+    </div>
 </div>
 <div class="block">
     <h2>Structures</h2>
@@ -83,6 +90,10 @@
         Forest: <span id="forestTotal">0</span><br>
         Rocks: <span id="rocksTotal">0</span><br>
         Animals: <span id="animalsTotal">0</span></p>
+    <h2>Journal</h2>
+    <div id="journal" >
+        WELCOME TO FEELSCLICKERMAN!
+    </div>
     <h2>Settings</h2>
     <button onclick="resetGameData()" id="resetGameData">RESET</button>
 </div>

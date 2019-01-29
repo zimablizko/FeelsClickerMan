@@ -11,7 +11,7 @@ var gold = {
     },
     food = {
         name: 'food',
-        total: 0,
+        total: 10,
         default: 100,
         max: 100,
         perClick: 1,
@@ -22,7 +22,7 @@ var gold = {
     },
     wood = {
         name: 'wood',
-        total: 0,
+        total: 10,
         default: 100,
         max: 100,
         perClick: 1,
@@ -33,7 +33,7 @@ var gold = {
     },
     stone = {
         name: 'stone',
-        total: 0,
+        total: 10,
         default: 100,
         max: 100,
         perClick: 1,
@@ -56,15 +56,15 @@ var gold = {
 
     population = {
         total: 0,
-        max:20,
+        max: 20,
         workers: 0,
         farmers: 0,
         miners: 0,
         woodcutters: 0,
-        globalMod:1
+        globalMod: 1
     }
 
-    worker = {
+worker = {
     name: 'worker',
     type: 'unit',
     total: 0,
@@ -226,37 +226,53 @@ var gold = {
     },
 
     upgrades = {
-        hunting:{
-            level:0,
-            require:{
-                food:50
+        hunting: {
+            level: 0,
+            require: {
+                food: 50
             }
         },
         safekeeping: {
-            level:0,
-            require:{
-                wood:50,
-                stone:50
+            level: 0,
+            require: {
+                wood: 50,
+                stone: 50
+            }
+        },
+        masonry: {
+            level: 0,
+            require: {
+                wood: 200,
+                stone: 200
+            }
+        },
+        exploring: {
+            level: 0,
+            require: {
+                food: 250,
+                wood: 250
             }
         }
     }
 
-    world = {
-        year: 1,
-        season: 3,
-        seasonName: "Early Spring",
-        springForestGrownSpeed:5,
-        summerAnimalGrownSpeed:1,
-        autumnFarmerBonus: 1,
-        winterGlobalDecrease: 0.6,
-        timePerMonth: 20,
-        time: 20,
-        lands: 1000,
-        forest: 1500,
-        rocks: 2000,
-        animals: 500,
-        corpses:0
-    }
+achievements = {}
+
+world = {
+    year: 1,
+    season: 3,
+    seasonName: "Early Spring",
+    springForestGrownSpeed: 5,
+    summerAnimalGrownSpeed: 1,
+    autumnFarmerBonus: 1,
+    winterGlobalDecrease: 0.6,
+    timePerMonth: 20,
+    time: 20,
+    lands: 1000,
+    forest: 1500,
+    rocks: 2000,
+    animals: 500,
+    corpses: 0
+}
 
 var gameData = {
     //gold:gold
@@ -270,7 +286,7 @@ function clickResource(resource) {
 }
 
 function resourcePerTick(resource) {
-    if (resource.total<resource.max) {
+    if (resource.total < resource.max) {
         if (resource == gameData.gold)
             resource.perTick = gameData.mine.effect.goldPerTick * gameData.mine.total
         else if (resource == gameData.food) {
@@ -284,9 +300,10 @@ function resourcePerTick(resource) {
                 resource.perTick += gameData.hunter.effect.foodPerTick * gameData.hunter.total * gameData.population.globalMod
                 gameData.world.animals -= (gameData.hunter.effect.foodPerTick * gameData.hunter.total) / 10;
             }
-            if (resource.total==0 && resource.perTick<0){
-
-                killUnit(getRandomUnit())
+            if (resource.total == 0 && resource.perTick < 0) {
+                var rndUnit = getRandomUnit()
+                killUnit(rndUnit)
+                addMessage(rndUnit.name + " dead by starving death.")
             }
         } else if (resource == gameData.wood)
             if (gameData.world.forest > 0) {
@@ -315,22 +332,27 @@ function buyGoldPerClick() {
     }
 }
 
-function checkResourceBounds(resource){
-    if (resource.total<0)
-        resource.total=0
-    else if (resource.total>resource.max)
-        resource.total=resource.max
+function checkResourceBounds(resource) {
+    if (resource.total < 0)
+        resource.total = 0
+    else if (resource.total > resource.max)
+        resource.total = resource.max
+    if (gameData.world.forest < 0)
+        gameData.world.forest = 0
+    if (gameData.world.rocks < 0)
+        gameData.world.rocks = 0
+    if (gameData.world.animals < 0)
+        gameData.world.animals = 0
+
 }
 
 //UNITS
 function createUnit(unit) {
-    if (unit==gameData.worker && gameData.population.total<gameData.population.max && gameData.food.total >= unit.require.food){
+    if (unit == gameData.worker && gameData.population.total < gameData.population.max && gameData.food.total >= unit.require.food) {
         unit.total += 1
-        //gameData.population.total+=1
         gameData.food.total -= unit.require.food
 
-    }else
-    if (unit!=gameData.worker && gameData.gold.total >= unit.require.gold && gameData.food.total >= unit.require.food && gameData.wood.total >= unit.require.wood && gameData.stone.total >= unit.require.stone && gameData.worker.total >= unit.require.worker) {
+    } else if (unit != gameData.worker && gameData.gold.total >= unit.require.gold && gameData.food.total >= unit.require.food && gameData.wood.total >= unit.require.wood && gameData.stone.total >= unit.require.stone && gameData.worker.total >= unit.require.worker) {
         unit.total += 1
         gameData.gold.total -= unit.require.gold
         gameData.food.total -= unit.require.food
@@ -349,17 +371,16 @@ function createUnit(unit) {
 function fireUnit(unit) {
     if (unit.total > 0) {
         unit.total -= 1
-        gameData.worker.total += 1
+        gameData.worker.total += unit.require.worker
         updateGameData()
     }
 }
 
 
-
 function killUnit(unit) {
     if (unit.total > 0) {
         unit.total -= 1
-        gameData.world.corpses += 1
+        gameData.world.corpses += unit.require.worker
         updateGameData()
     }
 }
@@ -381,15 +402,29 @@ function createStructure(structure) {
 }
 
 //UPGRADES
-function getUpgrade(upgrade){
-    if (upgrade == 'hunting' && gameData.food.total >= gameData.upgrades.hunting.require.food){
+function getUpgrade(upgrade) {
+    if (upgrade == 'hunting' && gameData.food.total >= gameData.upgrades.hunting.require.food) {
         gameData.upgrades.hunting.level = 1;
         gameData.food.total -= gameData.upgrades.hunting.require.food;
+        addMessage("Now your people can hunt animals!")
     }
-    if (upgrade == 'safekeeping' && gameData.wood.total >= gameData.upgrades.safekeeping.require.wood && gameData.stone.total >= gameData.upgrades.safekeeping.require.stone){
+    if (upgrade == 'safekeeping' && gameData.wood.total >= gameData.upgrades.safekeeping.require.wood && gameData.stone.total >= gameData.upgrades.safekeeping.require.stone) {
         gameData.upgrades.safekeeping.level = 1;
         gameData.wood.total -= gameData.upgrades.safekeeping.require.wood;
         gameData.stone.total -= gameData.upgrades.safekeeping.require.stone;
+        addMessage("Now your people have more space for materials!")
+    }
+    if (upgrade == 'masonry' && gameData.wood.total >= gameData.upgrades.masonry.require.wood && gameData.stone.total >= gameData.upgrades.masonry.require.stone) {
+        gameData.upgrades.masonry.level = 1;
+        gameData.wood.total -= gameData.upgrades.masonry.require.wood;
+        gameData.stone.total -= gameData.upgrades.masonry.require.stone;
+        addMessage("New structures unlocked!")
+    }
+    if (upgrade == 'exploring' && gameData.wood.total >= gameData.upgrades.exploring.require.wood && gameData.food.total >= gameData.upgrades.exploring.require.food) {
+        gameData.upgrades.safekeeping.level = 1;
+        gameData.wood.total -= gameData.upgrades.exploring.require.wood;
+        gameData.stone.food -= gameData.upgrades.exploring.require.food;
+        addMessage("Now your people can scout new territories!")
     }
     updateGameData()
 }
@@ -397,75 +432,77 @@ function getUpgrade(upgrade){
 //DATA
 function updateGameData() {
     //WORLD
-    document.getElementById("landsTotal").innerHTML = prettify(gameData.world.lands,0)
-    document.getElementById("rocksTotal").innerHTML = prettify(gameData.world.rocks,5)
-    document.getElementById("forestTotal").innerHTML = prettify(gameData.world.forest,5)
-    document.getElementById("animalsTotal").innerHTML = prettify(gameData.world.animals,5)
+    document.getElementById("landsTotal").innerHTML = prettify(gameData.world.lands, 0)
+    document.getElementById("rocksTotal").innerHTML = prettify(gameData.world.rocks, 5)
+    document.getElementById("forestTotal").innerHTML = prettify(gameData.world.forest, 5)
+    document.getElementById("animalsTotal").innerHTML = prettify(gameData.world.animals, 5)
     document.getElementById("seasonName").innerHTML = gameData.world.seasonName
     document.getElementById("seasonTime").innerHTML = gameData.world.time
     document.getElementById("year").innerHTML = gameData.world.year
     //POPULATION
     updatePopulationData()
-    document.getElementById("populationTotal").innerHTML = gameData.population.total+"/"+gameData.population.max
+    document.getElementById("populationTotal").innerHTML = gameData.population.total + "/" + gameData.population.max
     //RESOURCES
     updateResourcesData()
     //GOLD
-    document.getElementById("goldTotal").innerHTML = prettify(gameData.gold.total)+"/"+prettify(gameData.gold.max)
+    document.getElementById("goldTotal").innerHTML = prettify(gameData.gold.total) + "/" + prettify(gameData.gold.max)
     document.getElementById("goldPerTick").innerHTML = prettify(gameData.gold.perTick)
-   // document.getElementById("goldPerClick").innerHTML = prettify(gameData.gold.perClick)
+    // document.getElementById("goldPerClick").innerHTML = prettify(gameData.gold.perClick)
     //document.getElementById("perClickUpgrade").innerHTML = "Upgrade Pickaxe (Level " + gameData.gold.perClick + ")"
     //document.getElementById("perClickUpgradeCost").innerHTML = prettify(gameData.gold.perClickUpgradeCost)
     //FOOD
-    document.getElementById("foodTotal").innerHTML = prettify(gameData.food.total)+"/"+prettify(gameData.food.max)
+    document.getElementById("foodTotal").innerHTML = prettify(gameData.food.total) + "/" + prettify(gameData.food.max)
     document.getElementById("foodPerTick").innerHTML = prettify(gameData.food.perTick)
     document.getElementById("foodPerClick").innerHTML = prettify(gameData.food.perClick)
     //WOOD
-    document.getElementById("woodTotal").innerHTML = prettify(gameData.wood.total)+"/"+prettify(gameData.wood.max)
+    document.getElementById("woodTotal").innerHTML = prettify(gameData.wood.total) + "/" + prettify(gameData.wood.max)
     document.getElementById("woodPerTick").innerHTML = prettify(gameData.wood.perTick)
     document.getElementById("woodPerClick").innerHTML = prettify(gameData.wood.perClick)
     //STONE
-    document.getElementById("stoneTotal").innerHTML = prettify(gameData.stone.total)+"/"+prettify(gameData.stone.max)
+    document.getElementById("stoneTotal").innerHTML = prettify(gameData.stone.total) + "/" + prettify(gameData.stone.max)
     document.getElementById("stonePerTick").innerHTML = prettify(gameData.stone.perTick)
     document.getElementById("stonePerClick").innerHTML = prettify(gameData.stone.perClick)
     //document.getElementById("foodPerClickUpgrade").innerHTML = "Upgrade Pickaxe (Level " + gameData.food.perClick + ")"
     //document.getElementById("foodPerClickUpgradeCost").innerHTML = prettify(gameData.food.perClickUpgradeCost)
     //MEMES
-    document.getElementById("memesTotal").innerHTML = prettify(gameData.memes.total)+"/"+prettify(gameData.memes.max)
+    document.getElementById("memesTotal").innerHTML = prettify(gameData.memes.total) + "/" + prettify(gameData.memes.max)
     //document.getElementById("memesPerTick").innerHTML = prettify(gameData.memes.perTick)
     //document.getElementById("memesPerClick").innerHTML = prettify(gameData.memes.perClick)
     //WORKERS
-    document.getElementById("workerTotal").innerHTML = prettify(gameData.worker.total,0)
+    document.getElementById("workerTotal").innerHTML = prettify(gameData.worker.total, 0)
     //document.getElementById("workerCostGold").innerHTML = prettify(gameData.worker.require.gold)
-    document.getElementById("workerCost").innerHTML = " Cost: "+prettify(gameData.worker.require.food,0)+ " Food"
+    document.getElementById("workerCost").innerHTML = " Cost: " + prettify(gameData.worker.require.food, 0) + " Food"
     //FARMERS
     document.getElementById("farmerTotal").innerHTML = gameData.farmer.total
-    document.getElementById("farmerCost").innerHTML = " Cost: "+prettify(gameData.farmer.require.wood,0)+ " Wood"
+    document.getElementById("farmerCost").innerHTML = " Cost: " + prettify(gameData.farmer.require.wood, 0) + " Wood"
     //HUNTERS
     document.getElementById("hunterTotal").innerHTML = gameData.hunter.total
-    document.getElementById("hunterCost").innerHTML = " Cost: "+prettify(gameData.hunter.require.wood,0)+ " Wood, "+prettify(gameData.hunter.require.stone,0)+ " Stone"
+    document.getElementById("hunterCost").innerHTML = " Cost: " + prettify(gameData.hunter.require.wood, 0) + " Wood, " + prettify(gameData.hunter.require.stone, 0) + " Stone"
     //MINERS
     document.getElementById("minerTotal").innerHTML = gameData.miner.total
-    document.getElementById("minerCost").innerHTML = " Cost: "+prettify(gameData.miner.require.wood,0)+ " Wood"
+    document.getElementById("minerCost").innerHTML = " Cost: " + prettify(gameData.miner.require.wood, 0) + " Wood"
     //WOODCUTTERS
     document.getElementById("woodcutterTotal").innerHTML = gameData.woodcutter.total
-    document.getElementById("woodcutterCost").innerHTML = " Cost: "+prettify(gameData.woodcutter.require.wood,0)+ " Wood"
+    document.getElementById("woodcutterCost").innerHTML = " Cost: " + prettify(gameData.woodcutter.require.wood, 0) + " Wood"
     //MINE
     //document.getElementById("mineTotal").innerHTML = gameData.mine.total
     //document.getElementById("mineCostGold").innerHTML = prettify(gameData.mine.require.gold)
     //document.getElementById("mineCostWorker").innerHTML = gameData.mine.require.worker
     // TENT
     document.getElementById("tentTotal").innerHTML = gameData.tent.total
-    document.getElementById("tentCost").innerHTML =" Cost: "+prettify(gameData.tent.require.wood,0)+ " Wood, "+prettify(gameData.tent.require.stone,0)+ " Stone"
-    document.getElementById("tentCostWorker").innerHTML = "Require: "+gameData.tent.require.worker + " Workers"
+    document.getElementById("tentCost").innerHTML = " Cost: " + prettify(gameData.tent.require.wood, 0) + " Wood, " + prettify(gameData.tent.require.stone, 0) + " Stone"
+    document.getElementById("tentCostWorker").innerHTML = "Require: " + gameData.tent.require.worker + " Workers"
     // STORAGE
     document.getElementById("storageTotal").innerHTML = gameData.storage.total
-    document.getElementById("storageCost").innerHTML =" Cost: "+prettify(gameData.storage.require.wood,0)+ " Wood, "+prettify(gameData.storage.require.stone,0)+ " Stone"
-    document.getElementById("storageCostWorker").innerHTML = " Require: "+gameData.storage.require.worker + " Workers"
+    document.getElementById("storageCost").innerHTML = " Cost: " + prettify(gameData.storage.require.wood, 0) + " Wood, " + prettify(gameData.storage.require.stone, 0) + " Stone"
+    document.getElementById("storageCostWorker").innerHTML = " Require: " + gameData.storage.require.worker + " Workers"
 
     //UPGRADES
     updateUpgradesData()
-    document.getElementById("huntingCost").innerHTML = " Cost: "+ prettify(gameData.upgrades.hunting.require.food,0)+ " Food"
-    document.getElementById("safekeepingCost").innerHTML = " Cost: "+ prettify(gameData.upgrades.safekeeping.require.wood,0)+ " Wood, "+prettify(gameData.upgrades.safekeeping.require.stone,0)+ " Stone"
+    document.getElementById("huntingCost").innerHTML = " Cost: " + prettify(gameData.upgrades.hunting.require.food, 0) + " Food"
+    document.getElementById("safekeepingCost").innerHTML = " Cost: " + prettify(gameData.upgrades.safekeeping.require.wood, 0) + " Wood, " + prettify(gameData.upgrades.safekeeping.require.stone, 0) + " Stone"
+    document.getElementById("masonryCost").innerHTML = " Cost: " + prettify(gameData.upgrades.masonry.require.wood, 0) + " Wood, " + prettify(gameData.upgrades.masonry.require.stone, 0) + " Stone"
+    document.getElementById("exploringCost").innerHTML = " Cost: " + prettify(gameData.upgrades.exploring.require.wood, 0) + " Wood, " + prettify(gameData.upgrades.exploring.require.food, 0) + " Food"
     //
     updateAccessData()
 }
@@ -487,6 +524,7 @@ function resetGameData() {
     gameData.tent = clone(tent)
     gameData.upgrades = clone(upgrades)
     gameData.world = clone(world)
+    gameData.achievements = clone(achievements)
     updateGameData()
     localStorage.removeItem('goldMinerSave')
 }
@@ -498,15 +536,15 @@ function updatePopulationData() {
     gameData.population.woodcutters = gameData.woodcutter.total
     gameData.population.miners = gameData.miner.total
     gameData.population.hunters = gameData.hunter.total
-    gameData.population.total = gameData.population.workers + gameData.population.farmers + gameData.population.woodcutters + gameData.population.miners+ gameData.population.hunters
-    gameData.population.max = 20 + gameData.tent.total*gameData.tent.effect.populationMax
-    gameData.worker.require.food = worker.require.food+gameData.population.total
+    gameData.population.total = gameData.population.workers + gameData.population.farmers + gameData.population.woodcutters + gameData.population.miners + gameData.population.hunters
+    gameData.population.max = 20 + gameData.tent.total * gameData.tent.effect.populationMax
+    gameData.worker.require.food = worker.require.food + gameData.population.total
 }
 
 function updateResourcesData() {
-    gameData.food.max = gameData.food.default + gameData.storage.total*gameData.storage.effect.allMax
-    gameData.wood.max = gameData.wood.default + gameData.storage.total*gameData.storage.effect.allMax
-    gameData.stone.max = gameData.stone.default + gameData.storage.total*gameData.storage.effect.allMax
+    gameData.food.max = gameData.food.default + gameData.storage.total * gameData.storage.effect.allMax
+    gameData.wood.max = gameData.wood.default + gameData.storage.total * gameData.storage.effect.allMax
+    gameData.stone.max = gameData.stone.default + gameData.storage.total * gameData.storage.effect.allMax
     gameData.gold.max = gameData.gold.default
     gameData.memes.max = gameData.memes.default
 }
@@ -534,6 +572,29 @@ function updateUpgradesData() {
             document.getElementById('safekeepingBut').disabled = true;
         }
     }
+    //MASONRY
+    if (gameData.upgrades.masonry.level == 1) {
+        document.getElementById('masonryLine').style.display = 'none';
+    } else {
+        document.getElementById('masonryLine').style.display = 'block';
+        if (gameData.wood.total >= gameData.upgrades.masonry.require.wood && gameData.stone.total >= gameData.upgrades.masonry.require.stone) {
+            document.getElementById('masonryBut').disabled = false;
+        } else {
+            document.getElementById('masonryBut').disabled = true;
+        }
+    }
+    //EXPLORING
+    if (gameData.upgrades.exploring.level == 1 || gameData.upgrades.hunting.level == 0) {
+        document.getElementById('exploringLine').style.display = 'none';
+    } else {
+        document.getElementById('exploringLine').style.display = 'block';
+        if (gameData.wood.total >= gameData.upgrades.exploring.require.wood && gameData.food.total >= gameData.upgrades.exploring.require.food) {
+            document.getElementById('exploringBut').disabled = false;
+        } else {
+            document.getElementById('exploringBut').disabled = true;
+        }
+    }
+
 }
 
 function updateAccessData() {
@@ -545,7 +606,7 @@ function updateAccessData() {
         document.getElementById('createWorker').disabled = true;
     }
     //FARMER
-    if (gameData.wood.total >= gameData.farmer.require.wood && gameData.worker.total >= gameData.farmer.require.worker ) {
+    if (gameData.wood.total >= gameData.farmer.require.wood && gameData.worker.total >= gameData.farmer.require.worker) {
         document.getElementById('createFarmer').disabled = false;
     } else {
         document.getElementById('createFarmer').disabled = true;
@@ -558,14 +619,14 @@ function updateAccessData() {
     //HUNTER
     if (gameData.upgrades.hunting.level == 0) {
         document.getElementById('hunterLine').style.display = 'none';
-    }else{
+    } else {
         document.getElementById('hunterLine').style.display = 'block';
-        if (gameData.wood.total >= gameData.hunter.require.wood && gameData.stone.total >= gameData.hunter.require.stone && gameData.worker.total >= gameData.hunter.require.worker ) {
+        if (gameData.wood.total >= gameData.hunter.require.wood && gameData.stone.total >= gameData.hunter.require.stone && gameData.worker.total >= gameData.hunter.require.worker) {
             document.getElementById('createHunter').disabled = false;
         } else {
             document.getElementById('createHunter').disabled = true;
         }
-        if (gameData.farmer.total > 0) {
+        if (gameData.hunter.total > 0) {
             document.getElementById('fireHunter').disabled = false;
         } else {
             document.getElementById('fireHunter').disabled = true;
@@ -573,7 +634,7 @@ function updateAccessData() {
     }
 
     //MINER
-    if (gameData.wood.total >= gameData.miner.require.wood && gameData.worker.total >= gameData.miner.require.worker ) {
+    if (gameData.wood.total >= gameData.miner.require.wood && gameData.worker.total >= gameData.miner.require.worker) {
         document.getElementById('createMiner').disabled = false;
     } else {
         document.getElementById('createMiner').disabled = true;
@@ -584,7 +645,7 @@ function updateAccessData() {
         document.getElementById('fireMiner').disabled = true;
     }
     //WOODCUTTER
-    if (gameData.wood.total >= gameData.woodcutter.require.wood && gameData.worker.total >= gameData.woodcutter.require.worker ) {
+    if (gameData.wood.total >= gameData.woodcutter.require.wood && gameData.worker.total >= gameData.woodcutter.require.worker) {
         document.getElementById('createWoodcutter').disabled = false;
     } else {
         document.getElementById('createWoodcutter').disabled = true;
@@ -603,57 +664,108 @@ function updateAccessData() {
     //STORAGE
     if (gameData.upgrades.safekeeping.level == 0) {
         document.getElementById('storageLine').style.display = 'none';
-       // document.getElementById('Pdomestication').style.display = 'block';
+        // document.getElementById('Pdomestication').style.display = 'block';
     } else {
         document.getElementById('storageLine').style.display = 'block';
-       // document.getElementById('Pdomestication').style.display = 'none';
+        // document.getElementById('Pdomestication').style.display = 'none';
         if (gameData.wood.total >= gameData.storage.require.wood & gameData.stone.total >= gameData.storage.require.stone && gameData.worker.total >= gameData.storage.require.worker) {
             document.getElementById('storageBut').disabled = false;
         } else {
             document.getElementById('storageBut').disabled = true;
         }
     }
+    //SCOUTING
+    if (gameData.upgrades.exploring.level == 0) {
+        document.getElementById('ordersBlock').style.display = 'none';
+        // document.getElementById('Pdomestication').style.display = 'block';
+    } else {
+        document.getElementById('ordersBlock').style.display = 'block';
+        // document.getElementById('Pdomestication').style.display = 'none';
+        /*if (gameData.wood.total >= gameData.storage.require.wood & gameData.stone.total >= gameData.storage.require.stone && gameData.worker.total >= gameData.storage.require.worker) {
+            document.getElementById('storageBut').disabled = false;
+        } else {
+            document.getElementById('storageBut').disabled = true;
+        }*/
+    }
 
 }
+
 //WORLD CIRCLE
-function worldTimeTick(){
-    if (gameData.world.time>0)
-        gameData.world.time-=1
-    else{
-        gameData.world.time=gameData.world.timePerMonth
-        if(gameData.world.season<12){
-            gameData.world.season+=1
-        }else{
-            gameData.world.year+=1
-            gameData.world.season=1
+function worldTimeTick() {
+    if (gameData.world.time > 0)
+        gameData.world.time -= 1
+    else {
+        gameData.world.time = gameData.world.timePerMonth
+        if (gameData.world.season < 12) {
+            gameData.world.season += 1
+        } else {
+            gameData.world.year += 1
+            gameData.world.season = 1
+            addMessage("Happy New Year!")
         }
+        seasonChange()
     }
-    switch (gameData.world.season){
-        case 1: gameData.world.seasonName = "Midwinter"; break;
-        case 2: gameData.world.seasonName = "End of Winter"; break;
-        case 3: gameData.world.seasonName = "Early Spring"; break;
-        case 4: gameData.world.seasonName = "Mid Spring"; break;
-        case 5: gameData.world.seasonName = "End of Spring"; break;
-        case 6: gameData.world.seasonName = "Early Summer"; break;
-        case 7: gameData.world.seasonName = "Mid Summer"; break;
-        case 8: gameData.world.seasonName = "End of Summer"; break;
-        case 9: gameData.world.seasonName = "Early Autumn"; break;
-        case 10: gameData.world.seasonName = "Mid Autumn"; break;
-        case 11: gameData.world.seasonName = "End of Autumn"; break;
-        case 12: gameData.world.seasonName = "Early Winter"; break;
+
+
+    if (gameData.world.season >= 11 || gameData.world.season <= 1) {
+        gameData.population.globalMod = gameData.world.winterGlobalDecrease
+    } else {
+        gameData.population.globalMod = 1
     }
-    if (gameData.world.season >=11 || gameData.world.season <=1){
-        gameData.population.globalMod=gameData.world.winterGlobalDecrease
-    }else{
-        gameData.population.globalMod=1
+    if (gameData.world.season >= 3 && gameData.world.season <= 5) {
+        gameData.world.forest += gameData.world.springForestGrownSpeed
     }
-    if (gameData.world.season >=3 && gameData.world.season <=5){
-        gameData.world.forest+=gameData.world.springForestGrownSpeed
-    }
-    if (gameData.world.season >=6 && gameData.world.season <=8){
-        gameData.world.animals+=gameData.world.summerAnimalGrownSpeed
+    if (gameData.world.season >= 6 && gameData.world.season <= 8) {
+        gameData.world.animals += gameData.world.summerAnimalGrownSpeed
     }
 }
+
+function seasonChange() {
+
+    switch (gameData.world.season) {
+        case 1:
+            gameData.world.seasonName = "Midwinter";
+            break;
+        case 2:
+            gameData.world.seasonName = "End of Winter";
+            break;
+        case 3:
+            gameData.world.seasonName = "Early Spring";
+            addMessage("Spring has come! Forest begins to grow.")
+            break;
+        case 4:
+            gameData.world.seasonName = "Mid Spring";
+            break;
+        case 5:
+            gameData.world.seasonName = "End of Spring";
+            break;
+        case 6:
+            gameData.world.seasonName = "Early Summer";
+            addMessage("Summer has come! Animals begin to grow.")
+            break;
+        case 7:
+            gameData.world.seasonName = "Mid Summer";
+            break;
+        case 8:
+            gameData.world.seasonName = "End of Summer";
+            break;
+        case 9:
+            gameData.world.seasonName = "Early Autumn";
+            addMessage("Autumn has come! Farmers work twice efficiently.")
+            break;
+        case 10:
+            gameData.world.seasonName = "Mid Autumn";
+            break;
+        case 11:
+            gameData.world.seasonName = "End of Autumn";
+            break;
+        case 12:
+            gameData.world.seasonName = "Early Winter";
+            addMessage("Winter is coming! Your people work less efficiently.")
+            break;
+    }
+}
+
 
 //MAIN LOOP
 var mainGameLoop = window.setInterval(function () {
@@ -679,7 +791,7 @@ if (saveData !== null) {
 
 //UTILS
 function prettify(input, digits=1) {
-    if (digits>0)
+    if (digits > 0)
         return input.toFixed(digits).toString()
     else
         return Math.ceil(input).toString()
@@ -689,13 +801,18 @@ function getRandomFromArray(array) {
     return array[Math.floor(Math.random() * array.length)];
 }
 
-function getRandomUnit(){
-    var array = [gameData.worker,gameData.farmer,gameData.woodcutter,gameData.miner]
-    while (true){
+function getRandomUnit() {
+    var array = [gameData.worker, gameData.farmer, gameData.woodcutter, gameData.miner]
+    while (true) {
         var unit = getRandomFromArray(array)
-        if (unit.total>0)
+        if (unit.total > 0)
             return unit
     }
+}
+
+function addMessage(msg) {
+    var d = new Date();
+    document.getElementById("journal").innerHTML = "(" + d.toLocaleTimeString("ru-ru") + "): " + msg + "<br>" + document.getElementById("journal").innerHTML
 }
 
 function clone(obj) {

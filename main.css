@@ -19,3 +19,10 @@
     display: inline-block;
     vertical-align: top;
 }
+#journal{
+    width:250px;
+    height:300px;
+    padding: 5px;
+    border:1px black solid;
+    overflow: hidden;
+}
