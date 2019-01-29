@@ -13,3 +13,9 @@
 .cost-text{
     font-style: italic;
 }
+
+.block{
+    padding:20px;
+    display: inline-block;
+    vertical-align: top;
+}
