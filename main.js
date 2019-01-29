@@ -11,7 +11,7 @@ var gold = {
     },
     food = {
         name: 'food',
-        total: 10,
+        total: 20,
         default: 100,
         max: 100,
         perClick: 1,
@@ -61,7 +61,9 @@ var gold = {
         farmers: 0,
         miners: 0,
         woodcutters: 0,
-        globalMod: 1
+        globalMod: 1,
+        happiness: 1,
+        happinessStatus: "Normal"
     }
 
 worker = {
@@ -255,7 +257,19 @@ worker = {
         }
     }
 
-achievements = {}
+achievements = {
+    settlement:0,
+    village:0,
+    town:0,
+    city:0,
+    country:0,
+    nation:0,
+    empire:0,
+    cleanhands:0,
+    animallover:0,
+    exterminator:0,
+
+}
 
 world = {
     year: 1,
@@ -380,7 +394,7 @@ function fireUnit(unit) {
 function killUnit(unit) {
     if (unit.total > 0) {
         unit.total -= 1
-        gameData.world.corpses += unit.require.worker
+        gameData.world.corpses += 1
         updateGameData()
     }
 }
@@ -439,9 +453,12 @@ function updateGameData() {
     document.getElementById("seasonName").innerHTML = gameData.world.seasonName
     document.getElementById("seasonTime").innerHTML = gameData.world.time
     document.getElementById("year").innerHTML = gameData.world.year
+    document.getElementById("corpsesTotal").innerHTML = gameData.world.corpses
     //POPULATION
     updatePopulationData()
+    updateHappinessData()
     document.getElementById("populationTotal").innerHTML = gameData.population.total + "/" + gameData.population.max
+    document.getElementById("happiness").innerHTML = gameData.population.happinessStatus
     //RESOURCES
     updateResourcesData()
     //GOLD
@@ -539,6 +556,7 @@ function updatePopulationData() {
     gameData.population.total = gameData.population.workers + gameData.population.farmers + gameData.population.woodcutters + gameData.population.miners + gameData.population.hunters
     gameData.population.max = 20 + gameData.tent.total * gameData.tent.effect.populationMax
     gameData.worker.require.food = worker.require.food + gameData.population.total
+    gameData.population.globalMod= gameData.population.happiness*gameData.world.winterGlobalDecrease
 }
 
 function updateResourcesData() {
@@ -573,7 +591,7 @@ function updateUpgradesData() {
         }
     }
     //MASONRY
-    if (gameData.upgrades.masonry.level == 1) {
+    if (gameData.upgrades.masonry.level == 1 || gameData.upgrades.safekeeping.level == 0) {
         document.getElementById('masonryLine').style.display = 'none';
     } else {
         document.getElementById('masonryLine').style.display = 'block';
@@ -690,6 +708,11 @@ function updateAccessData() {
 
 }
 
+function updateHappinessData(){
+    if (gameData.population.happiness==1)
+        gameData.population.happinessStatus="Normal"
+}
+
 //WORLD CIRCLE
 function worldTimeTick() {
     if (gameData.world.time > 0)
@@ -708,9 +731,9 @@ function worldTimeTick() {
 
 
     if (gameData.world.season >= 11 || gameData.world.season <= 1) {
-        gameData.population.globalMod = gameData.world.winterGlobalDecrease
+       gameData.world.winterGlobalDecrease=world.winterGlobalDecrease
     } else {
-        gameData.population.globalMod = 1
+        gameData.world.winterGlobalDecrease=1
     }
     if (gameData.world.season >= 3 && gameData.world.season <= 5) {
         gameData.world.forest += gameData.world.springForestGrownSpeed
@@ -788,7 +811,7 @@ if (saveData !== null) {
 } else {
     resetGameData()
 }
-
+addMessage("WELCOME TO FEELSCLICKERMAN!")
 //UTILS
 function prettify(input, digits=1) {
     if (digits > 0)
