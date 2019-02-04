@@ -2,58 +2,59 @@
 <html lang="en" dir="ltr">
 <head>
     <meta charset="utf-8">
-    <title>FeelsClickerMan (v0.2)</title>
+    <title>FeelsClickerMan (v0.3)</title>
     <link rel="stylesheet" type="text/css" href="main.css" />
 
 </head>
 <body>
+
 <div class="block">
     <h2>Resources</h2>
 
     <p>Food: <span id="foodTotal">0</span> (<span id="foodPerTick">0</span>/sec)
-        <button onclick="clickResource(gameData.food)">Harvest (+<span id="foodPerClick">0</span>)</button>
+        <button onclick="clickResource(gameData.resources.food)">Harvest (+<span id="foodPerClick">0</span>)</button>
     </p>
     <p>Wood: <span id="woodTotal">0</span> (<span id="woodPerTick">0</span>/sec)
-        <button onclick="clickResource(gameData.wood)">Harvest (+<span id="woodPerClick">0</span>)</button>
+        <button onclick="clickResource(gameData.resources.wood)">Harvest (+<span id="woodPerClick">0</span>)</button>
     </p>
     <p>Stone: <span id="stoneTotal">0</span> (<span id="stonePerTick">0</span>/sec)
-        <button onclick="clickResource(gameData.stone)">Harvest (+<span id="stonePerClick">0</span>)</button>
+        <button onclick="clickResource(gameData.resources.stone)">Harvest (+<span id="stonePerClick">0</span>)</button>
     </p>
     <p>Gold: <span id="goldTotal">0</span> (<span id="goldPerTick">0</span>/sec)
-        <!--<button onclick="clickResource(gameData.gold)">Mine (+<span id="goldPerClick">0</span>)</button>--></p>
+        <!--<button onclick="clickResource(gameData.resources.gold)">Mine (+<span id="goldPerClick">0</span>)</button>--></p>
     <p>Memes: <span id="memesTotal">0</span></p>
 
     <h2>Upgrades</h2>
-    <div id="huntingLine"> <div class="upgrade-but-container"><button class="upgrade-but" onclick="getUpgrade('hunting')" id="huntingBut">Hunting</button></div> <div class="upgrade-info-container">Unlock Hunters<br><span class="cost-text" id="huntingCost"></span></div></div>
-    <div id="safekeepingLine"> <div class="upgrade-but-container"><button class="upgrade-but" onclick="getUpgrade('safekeeping')" id="safekeepingBut">Safekeeping</button></div> <div class="upgrade-info-container">Unlock Storages<br><span class="cost-text" id="safekeepingCost"></span></div></div>
-    <div id="masonryLine"> <div class="upgrade-but-container"><button class="upgrade-but" onclick="getUpgrade('masonry')" id="masonryBut">Masonry</button></div> <div class="upgrade-info-container">Unlock new structures<br><span class="cost-text" id="masonryCost"></span></div></div>
-    <div id="exploringLine"> <div class="upgrade-but-container"><button class="upgrade-but" onclick="getUpgrade('exploring')" id="exploringBut">Exploring</button></div> <div class="upgrade-info-container">Unlock Scouting<br><span class="cost-text" id="exploringCost"></span></div></div>
+    <div id="huntingLine"> <div class="upgrade-but-container"><button class="upgrade-but" onclick="getUpgrade(gameData.upgrades.hunting)" id="huntingBut">Hunting</button></div> <div class="upgrade-info-container">Unlock Hunters<br><span class="cost-text" id="huntingCost"></span></div></div>
+    <div id="safekeepingLine"> <div class="upgrade-but-container"><button class="upgrade-but" onclick="getUpgrade(gameData.upgrades.safekeeping)" id="safekeepingBut">Safekeeping</button></div> <div class="upgrade-info-container">Unlock Storages<br><span class="cost-text" id="safekeepingCost"></span></div></div>
+    <div id="masonryLine"> <div class="upgrade-but-container"><button class="upgrade-but" onclick="getUpgrade(gameData.upgrades.masonry)" id="masonryBut">Masonry</button></div> <div class="upgrade-info-container">Unlock new structures<br><span class="cost-text" id="masonryCost"></span></div></div>
+    <div id="exploringLine"> <div class="upgrade-but-container"><button class="upgrade-but" onclick="getUpgrade(gameData.upgrades.exploring)" id="exploringBut">Exploring</button></div> <div class="upgrade-info-container">Unlock Scouting<br><span class="cost-text" id="exploringCost"></span></div></div>
     <!--<p><button onclick="buyGoldPerClick()" id="perClickUpgrade">Upgrade Pickaxe (Level 1)</button> Cost: <span id="perClickUpgradeCost">10</span> Gold</p>-->
 </div>
 <div class="block">
     <h2>Units (Population: <span id="populationTotal">0</span>)</h2>
-    <p>Workers: <span id="workerTotal">0</span>
-        <button id="createWorker" onclick="createUnit(gameData.worker)">Create</button>
+    <p id="workerLine">Workers: <span id="workerTotal">0</span>
+        <button id="createWorker" onclick="createUnit(gameData.units.worker)">Create</button>
          <span class="cost-text" id="workerCost"></span>
     </p>
-    <p>Farmers: <span id="farmerTotal">0</span>
-        <button id="fireFarmer" onclick="fireUnit(gameData.farmer)">-</button>
-        <button id="createFarmer" onclick="createUnit(gameData.farmer)">+</button>
+    <p id="farmerLine">Farmers: <span id="farmerTotal">0</span>
+        <button id="fireFarmer" onclick="fireUnit(gameData.units.farmer)">-</button>
+        <button id="createFarmer" onclick="createUnit(gameData.units.farmer)">+</button>
         <span class="cost-text" id="farmerCost"></span>
     </p>
     <p id="hunterLine">Hunters: <span id="hunterTotal">0</span>
-        <button id="fireHunter" onclick="fireUnit(gameData.hunter)">-</button>
-        <button id="createHunter" onclick="createUnit(gameData.hunter)">+</button>
+        <button id="fireHunter" onclick="fireUnit(gameData.units.hunter)">-</button>
+        <button id="createHunter" onclick="createUnit(gameData.units.hunter)">+</button>
         <span class="cost-text" id="hunterCost"></span>
     </p>
-    <p>Woodcutters: <span id="woodcutterTotal">0</span>
-        <button id="fireWoodcutter" onclick="fireUnit(gameData.woodcutter)">-</button>
-        <button id="createWoodcutter" onclick="createUnit(gameData.woodcutter)">+</button>
+    <p id="woodcutterLine">Woodcutters: <span id="woodcutterTotal">0</span>
+        <button id="fireWoodcutter" onclick="fireUnit(gameData.units.woodcutter)">-</button>
+        <button id="createWoodcutter" onclick="createUnit(gameData.units.woodcutter)">+</button>
         <span class="cost-text" id="woodcutterCost"></span>
     </p>
-    <p>Miners: <span id="minerTotal">0</span>
-        <button id="fireMiner" onclick="fireUnit(gameData.miner)">-</button>
-        <button id="createMiner" onclick="createUnit(gameData.miner)">+</button>
+    <p id="minerLine">Miners: <span id="minerTotal">0</span>
+        <button id="fireMiner" onclick="fireUnit(gameData.units.miner)">-</button>
+        <button id="createMiner" onclick="createUnit(gameData.units.miner)">+</button>
         <span class="cost-text" id="minerCost"></span>
     </p>
     <div id="ordersBlock">
@@ -67,15 +68,15 @@
     <div>
 
     <p id="tentLine">Tent: <span id="tentTotal">0</span>
-        <button id="tentBut" onclick="createStructure(gameData.tent)">Build</button>
+        <button id="tentBut" onclick="createStructure(gameData.structures.tent)">Build</button>
         <span class="cost-text" id="tentCost"></span> | <span id="tentCostWorker">0</span>
     </p>
     <p id="storageLine">Storage: <span id="storageTotal">0</span>
-        <button id="storageBut" onclick="createStructure(gameData.storage)">Build</button>
+        <button id="storageBut" onclick="createStructure(gameData.structures.storage)">Build</button>
         <span class="cost-text" id="storageCost"></span> | <span id="storageCostWorker">0</span>
     </p>
     <!--<p>Mines: <span id="mineTotal">0</span>
-        <button id="createMine" onclick="createStructure(gameData.mine)">Build</button>
+        <button id="createMine" onclick="createStructure(gameData.structures.mine)">Build</button>
         Cost: <span id="mineCostGold">10</span> Gold, <span id="mineCostWorker">0</span> Worker
     </p>-->
 </div>
@@ -98,6 +99,7 @@
     </div>
     <h2>Settings</h2>
     <button onclick="resetGameData()" id="resetGameData">RESET</button>
+    <p><a href="pathnotes.html">Patchnotes</a></p>
 </div>
 <br>
 <br>
