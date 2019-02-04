@@ -1,196 +1,196 @@
-String.prototype.capitalize = function() {
+String.prototype.capitalize = function () {
     return this.charAt(0).toUpperCase() + this.slice(1);
 }
 
 var resources = {
-        gold: {
-            name: 'gold',
-            total: 0,
-            default: 50,
-            max: 100,
-            perClick: 1,
-            perClickUpgradeMod: 1,
-            perClickUpgradeCost: 10,
-            perClickUpgradeCostMod: 2.25,
-            perTick: 0,
-        },
-        food: {
-            name: 'food',
-            total: 20,
-            default: 100,
-            max: 100,
-            perClick: 1,
-            perClickUpgradeMod: 1,
-            perClickUpgradeCost: 10,
-            perClickUpgradeCostMod: 2.25,
-            perTick: 0,
-        },
-        wood: {
-            name: 'wood',
-            total: 10,
-            default: 100,
-            max: 100,
-            perClick: 1,
-            perClickUpgradeMod: 1,
-            perClickUpgradeCost: 10,
-            perClickUpgradeCostMod: 2.25,
-            perTick: 0,
-        },
-        stone: {
-            name: 'stone',
-            total: 10,
-            default: 100,
-            max: 100,
-            perClick: 1,
-            perClickUpgradeMod: 1,
-            perClickUpgradeCost: 10,
-            perClickUpgradeCostMod: 2.25,
-            perTick: 0,
-        },
-        memes: {
-            name: 'memes',
-            total: 2019,
-            default: 9000,
-            max: 9000,
-            perClick: 0,
-            perClickUpgradeMod: 0,
-            perClickUpgradeCost: 0,
-            perClickUpgradeCostMod: 0,
-            perTick: 0,
-        }
+    gold: {
+        name: 'gold',
+        total: 0,
+        default: 50,
+        max: 100,
+        perClick: 1,
+        perClickUpgradeMod: 1,
+        perClickUpgradeCost: 10,
+        perClickUpgradeCostMod: 2.25,
+        perTick: 0,
+    },
+    food: {
+        name: 'food',
+        total: 20,
+        default: 100,
+        max: 100,
+        perClick: 1,
+        perClickUpgradeMod: 1,
+        perClickUpgradeCost: 10,
+        perClickUpgradeCostMod: 2.25,
+        perTick: 0,
+    },
+    wood: {
+        name: 'wood',
+        total: 10,
+        default: 100,
+        max: 100,
+        perClick: 1,
+        perClickUpgradeMod: 1,
+        perClickUpgradeCost: 10,
+        perClickUpgradeCostMod: 2.25,
+        perTick: 0,
+    },
+    stone: {
+        name: 'stone',
+        total: 10,
+        default: 100,
+        max: 100,
+        perClick: 1,
+        perClickUpgradeMod: 1,
+        perClickUpgradeCost: 10,
+        perClickUpgradeCostMod: 2.25,
+        perTick: 0,
+    },
+    memes: {
+        name: 'memes',
+        total: 2019,
+        default: 9000,
+        max: 9000,
+        perClick: 0,
+        perClickUpgradeMod: 0,
+        perClickUpgradeCost: 0,
+        perClickUpgradeCostMod: 0,
+        perTick: 0,
+    }
 }
 
 population = {
-        total: 0,
-        max: 20,
-        globalMod: 1,
-        happiness: 1,
-        happinessStatus: "Normal"
+    total: 0,
+    max: 20,
+    globalMod: 1,
+    happiness: 1,
+    happinessStatus: "Normal"
 }
 
 units = {
-        worker: {
-            name: 'worker',
-            type: 'unit',
-            total: 0,
-            reqResources: {
-                worker: 0,
-                food: 10,
-                wood: 0,
-                stone: 0,
-                gold: 0
-            },
-            reqResourcesMod: {
-                food: 1,
-                wood: 1,
-                stone: 1,
-                gold: 1
-            }
+    worker: {
+        name: 'worker',
+        type: 'unit',
+        total: 0,
+        reqResources: {
+            worker: 0,
+            food: 10,
+            wood: 0,
+            stone: 0,
+            gold: 0
         },
-        farmer: {
-            name: 'farmer',
-            type: 'unit',
-            total: 0,
-            reqResources: {
-                worker: 1,
-                food: 0,
-                wood: 5,
-                stone: 0,
-                gold: 0
-            },
-            reqResourcesMod: {
-                food: 1,
-                wood: 1,
-                stone: 1,
-                gold: 1
-            },
-            effect: {
-                foodPerTick: 0.2
-            }
-        },
-        hunter: {
-            name: 'hunter',
-            type: 'unit',
-            total: 0,
-            reqResources: {
-                worker: 1,
-                food: 0,
-                wood: 10,
-                stone: 5,
-                gold: 0
-            },
-            reqUpgrades:
-                ['hunting'],
-            reqResourcesMod: {
-                food: 1,
-                wood: 1,
-                stone: 1,
-                gold: 1
-            },
-            effect: {
-                foodPerTick: 1
-            }
-        },
-        miner: {
-            name: 'miner',
-            type: 'unit',
-            total: 0,
-            reqResources: {
-                worker: 1,
-                food: 0,
-                wood: 5,
-                stone: 0,
-                gold: 0
-            },
-            reqResourcesMod: {
-                food: 1,
-                wood: 1,
-                stone: 1,
-                gold: 1
-            },
-            effect: {
-                stonePerTick: 0.1
-            }
-        },
-        woodcutter: {
-            name: 'woodcutter',
-            type: 'unit',
-            total: 0,
-            reqResources: {
-                worker: 1,
-                food: 0,
-                wood: 5,
-                stone: 0,
-                gold: 0
-            },
-            reqResourcesMod: {
-                food: 1,
-                wood: 1,
-                stone: 1,
-                gold: 1
-            },
-            effect: {
-                woodPerTick: 0.1
-            }
+        reqResourcesMod: {
+            food: 1,
+            wood: 1,
+            stone: 1,
+            gold: 1
         }
-    }
-
-structures = {
-   /* mine: {
-        name: 'mine',
-        type: 'structure',
+    },
+    farmer: {
+        name: 'farmer',
+        type: 'unit',
         total: 0,
         reqResources: {
             worker: 1,
-            gold: 10
+            food: 0,
+            wood: 5,
+            stone: 0,
+            gold: 0
         },
         reqResourcesMod: {
-            gold: 1.8
+            food: 1,
+            wood: 1,
+            stone: 1,
+            gold: 1
         },
         effect: {
-            goldPerTick: 0.1
+            foodPerTick: 0.2
         }
-    },*/
+    },
+    hunter: {
+        name: 'hunter',
+        type: 'unit',
+        total: 0,
+        reqResources: {
+            worker: 1,
+            food: 0,
+            wood: 10,
+            stone: 5,
+            gold: 0
+        },
+        reqUpgrades:
+            ['hunting'],
+        reqResourcesMod: {
+            food: 1,
+            wood: 1,
+            stone: 1,
+            gold: 1
+        },
+        effect: {
+            foodPerTick: 1
+        }
+    },
+    miner: {
+        name: 'miner',
+        type: 'unit',
+        total: 0,
+        reqResources: {
+            worker: 1,
+            food: 0,
+            wood: 5,
+            stone: 0,
+            gold: 0
+        },
+        reqResourcesMod: {
+            food: 1,
+            wood: 1,
+            stone: 1,
+            gold: 1
+        },
+        effect: {
+            stonePerTick: 0.1
+        }
+    },
+    woodcutter: {
+        name: 'woodcutter',
+        type: 'unit',
+        total: 0,
+        reqResources: {
+            worker: 1,
+            food: 0,
+            wood: 5,
+            stone: 0,
+            gold: 0
+        },
+        reqResourcesMod: {
+            food: 1,
+            wood: 1,
+            stone: 1,
+            gold: 1
+        },
+        effect: {
+            woodPerTick: 0.1
+        }
+    }
+}
+
+structures = {
+    /* mine: {
+         name: 'mine',
+         type: 'structure',
+         total: 0,
+         reqResources: {
+             worker: 1,
+             gold: 10
+         },
+         reqResourcesMod: {
+             gold: 1.8
+         },
+         effect: {
+             goldPerTick: 0.1
+         }
+     },*/
     storage: {
         name: 'storage',
         type: 'structure',
@@ -202,7 +202,7 @@ structures = {
             stone: 20,
             gold: 0
         },
-        reqUpgrades:['safekeeping'],
+        reqUpgrades: ['safekeeping'],
         reqResourcesMod: {
             food: 1,
             wood: 1.9,
@@ -239,6 +239,7 @@ structures = {
 upgrades = {
     hunting: {
         name: 'hunting',
+        type: 'upgrade',
         level: 0,
         reqResources: {
             food: 50
@@ -246,6 +247,7 @@ upgrades = {
     },
     safekeeping: {
         name: 'safekeeping',
+        type: 'upgrade',
         level: 0,
         reqResources: {
             wood: 50,
@@ -254,6 +256,7 @@ upgrades = {
     },
     masonry: {
         name: 'masonry',
+        type: 'upgrade',
         level: 0,
         reqResources: {
             wood: 200,
@@ -262,6 +265,7 @@ upgrades = {
     },
     exploring: {
         name: 'exploring',
+        type: 'upgrade',
         level: 0,
         reqResources: {
             food: 250,
@@ -296,7 +300,7 @@ world = {
     winterGlobalDecrease: 0.6,
     timePerMonth: 20,
     time: 20,
-    resources:{
+    resources: {
         lands: 1000,
         forest: 1500,
         rocks: 2000,
@@ -306,9 +310,32 @@ world = {
 }
 
 info = {
-    version:"0.3"
+    version: "0.3"
 }
 
+orders = {
+    scouting: {
+        name: 'scouting',
+        total: 0,
+        inProgress: false,
+        timeBase: 10,
+        timeToEnd: 0,
+        effect: {
+            baseReveal: 50,
+            rndReveal: 25
+        },
+        reqResources: {
+            food: 25,
+            wood: 25,
+            stone: 25
+        },
+        reqResourcesMod: {
+            food: 1.4,
+            wood: 1.4,
+            stone: 1.4
+        }
+    }
+}
 var gameData = {
     //gold:gold
 }
@@ -375,21 +402,10 @@ function createUnit(unit) {
     if (unit == gameData.units.worker && checkAvailabilityOfRes(unit)) {
         unit.total += 1
         gameData.resources.food.total -= unit.reqResources.food
-
+        updateGameData()
     } else if (unit != gameData.units.worker && checkAvailabilityOfRes(unit)) {
-        unit.total += 1
-        gameData.resources.gold.total -= unit.reqResources.gold
-        gameData.resources.food.total -= unit.reqResources.food
-        gameData.resources.wood.total -= unit.reqResources.wood
-        gameData.resources.stone.total -= unit.reqResources.stone
-        gameData.units.worker.total -= unit.reqResources.worker
-        unit.reqResources.gold *= unit.reqResourcesMod.gold
-        unit.reqResources.food *= unit.reqResourcesMod.food
-        unit.reqResources.wood *= unit.reqResourcesMod.wood
-        unit.reqResources.stone *= unit.reqResourcesMod.stone
-
+        createObject(unit)
     }
-    updateGameData()
 }
 
 function fireUnit(unit) {
@@ -399,7 +415,6 @@ function fireUnit(unit) {
         updateGameData()
     }
 }
-
 
 function killUnit(unit) {
     if (unit.total > 0) {
@@ -412,46 +427,38 @@ function killUnit(unit) {
 //STRUCTURES
 function createStructure(structure) {
     if (checkAvailabilityOfRes(structure)) {
-        structure.total += 1
-        gameData.resources.gold.total -= structure.reqResources.gold
-        gameData.resources.food.total -= structure.reqResources.food
-        gameData.resources.wood.total -= structure.reqResources.wood
-        gameData.resources.stone.total -= structure.reqResources.stone
-        structure.reqResources.gold *= structure.reqResourcesMod.gold
-        structure.reqResources.food *= structure.reqResourcesMod.food
-        structure.reqResources.wood *= structure.reqResourcesMod.wood
-        structure.reqResources.stone *= structure.reqResourcesMod.stone
-        updateGameData()
+        createObject(structure)
     }
 }
 
 //UPGRADES
 function getUpgrade(upgrade) {
-    if(checkAvailabilityOfRes(upgrade)) {
+    if (checkAvailabilityOfRes(upgrade)) {
+        createObject(upgrade)
         if (upgrade == gameData.upgrades.hunting) {
-            gameData.upgrades.hunting.level = 1;
-            gameData.resources.food.total -= gameData.upgrades.hunting.reqResources.food;
             addMessage("Now your people can hunt animals!")
         }
         if (upgrade == gameData.upgrades.safekeeping) {
-            gameData.upgrades.safekeeping.level = 1;
-            gameData.resources.wood.total -= gameData.upgrades.safekeeping.reqResources.wood;
             gameData.resources.stone.total -= gameData.upgrades.safekeeping.reqResources.stone;
             addMessage("Now your people have more space for materials!")
         }
-        if (upgrade ==  gameData.upgrades.masonry) {
-            gameData.upgrades.masonry.level = 1;
-            gameData.resources.wood.total -= gameData.upgrades.masonry.reqResources.wood;
-            gameData.resources.stone.total -= gameData.upgrades.masonry.reqResources.stone;
+        if (upgrade == gameData.upgrades.masonry) {
             addMessage("New structures unlocked!")
         }
         if (upgrade == gameData.upgrades.exploring) {
-            gameData.upgrades.exploring.level = 1;
-            gameData.resources.wood.total -= gameData.upgrades.exploring.reqResources.wood;
-            gameData.resources.stone.food -= gameData.upgrades.exploring.reqResources.food;
             addMessage("Now your people can scout new territories!")
         }
-        updateGameData()
+    }
+}
+
+//ORDERS
+function makeOrder(order) {
+    if (order == gameData.orders.scouting) {
+        if (checkAvailabilityOfRes(order)) {
+            createObject(order)
+            gameData.orders.scouting.inProgress = true;
+            gameData.orders.scouting.timeToEnd = gameData.orders.scouting.timeBase;
+        }
     }
 }
 
@@ -500,7 +507,7 @@ function updateGameData() {
     //document.getElementById("memesPerTick").innerHTML = prettify(gameData.memes.perTick)
     //document.getElementById("memesPerClick").innerHTML = prettify(gameData.memes.perClick)
     //WORKERS
-    document.getElementById("workerTotal").innerHTML =gameData.units.worker.total
+    document.getElementById("workerTotal").innerHTML = gameData.units.worker.total
     document.getElementById("workerCost").innerHTML = getCost(gameData.units.worker)
     //FARMERS
     document.getElementById("farmerTotal").innerHTML = gameData.units.farmer.total
@@ -521,21 +528,30 @@ function updateGameData() {
     // TENT
     document.getElementById("tentTotal").innerHTML = gameData.structures.tent.total
     document.getElementById("tentCost").innerHTML = getCost(gameData.structures.tent)
-    document.getElementById("tentCostWorker").innerHTML = "reqResources: " + gameData.structures.tent.reqResources.worker + " Workers"
+    document.getElementById("tentCostWorker").innerHTML = "Require: " + gameData.structures.tent.reqResources.worker + " Workers"
     // STORAGE
     document.getElementById("storageTotal").innerHTML = gameData.structures.storage.total
     document.getElementById("storageCost").innerHTML = getCost(gameData.structures.storage)
-    document.getElementById("storageCostWorker").innerHTML = " reqResources: " + gameData.structures.storage.reqResources.worker + " Workers"
+    document.getElementById("storageCostWorker").innerHTML = " Require: " + gameData.structures.storage.reqResources.worker + " Workers"
 
     //UPGRADES
     document.getElementById("huntingCost").innerHTML = getCost(gameData.upgrades.hunting)
     document.getElementById("safekeepingCost").innerHTML = getCost(gameData.upgrades.safekeeping)
     document.getElementById("masonryCost").innerHTML = getCost(gameData.upgrades.masonry)
     document.getElementById("exploringCost").innerHTML = getCost(gameData.upgrades.exploring)
-    //INFO
-    document.getElementById("versionText").innerHTML = gameData.info.version
+    //ORDERS
+    //SCOUTING
+    document.getElementById("scoutingCost").innerHTML = getCost(gameData.orders.scouting)
+    document.getElementById("scoutingProgress").setAttribute("max", gameData.orders.scouting.timeBase)
+    document.getElementById("scoutingProgress").setAttribute("value", gameData.orders.scouting.timeBase - gameData.orders.scouting.timeToEnd)
+    if (gameData.orders.scouting.timeToEnd > 0)
+        document.getElementById("scoutingTimer").innerHTML = "Scouts will return in: " + gameData.orders.scouting.timeToEnd
+    else
+        document.getElementById("scoutingTimer").innerHTML = "Scouts are idling"
     //
     updateAccessData()
+    //
+    document.getElementById("versionText").innerHTML = gameData.info.version
 }
 
 function resetGameData() {
@@ -546,14 +562,15 @@ function resetGameData() {
     gameData.upgrades = clone(upgrades)
     gameData.world = clone(world)
     gameData.achievements = clone(achievements)
+    gameData.orders = clone(orders)
     gameData.info = clone(info)
     updateGameData()
-    localStorage.removeItem('goldMinerSave')
+    localStorage.removeItem('goldMinerSave1')
 }
 
 function updatePopulationData() {
 
-    gameData.population.total = gameData.units.worker.total +  gameData.units.farmer.total +  gameData.units.woodcutter.total +  gameData.units.miner.total +  gameData.units.hunter.total
+    gameData.population.total = gameData.units.worker.total + gameData.units.farmer.total + gameData.units.woodcutter.total + gameData.units.miner.total + gameData.units.hunter.total
     gameData.population.max = 20 + gameData.structures.tent.total * gameData.structures.tent.effect.populationMax
     gameData.units.worker.reqResources.food = units.worker.reqResources.food + gameData.population.total
     gameData.population.globalMod = gameData.population.happiness * gameData.world.winterGlobalDecrease
@@ -567,20 +584,18 @@ function updateResourcesData() {
     gameData.resources.memes.max = gameData.resources.memes.default
 }
 
-
-
 function updateAccessData() {
 
     //WORKER
-   if (checkAvailabilityOfRes(gameData.units.worker) && gameData.population.total < gameData.population.max) {
-        document.getElementById('create'+gameData.units.worker.name.capitalize()).disabled = false;
+    if (checkAvailabilityOfRes(gameData.units.worker) && gameData.population.total < gameData.population.max) {
+        document.getElementById('create' + gameData.units.worker.name.capitalize()).disabled = false;
     } else {
-        document.getElementById('create'+gameData.units.worker.name.capitalize()).disabled = true;
+        document.getElementById('create' + gameData.units.worker.name.capitalize()).disabled = true;
     }
 
-     //OTHER UNITS
+    //OTHER UNITS
     Object.keys(gameData.units).forEach(function (a) {
-        if(gameData.units[a].name!="worker") {
+        if (gameData.units[a].name != "worker") {
             if (!checkAvailabilityOfTech(gameData.units[a])) {
                 document.getElementById(gameData.units[a].name + 'Line').style.display = 'none';
             } else {
@@ -602,13 +617,13 @@ function updateAccessData() {
     //STRUCTURES
     Object.keys(gameData.structures).forEach(function (a) {
         if (!checkAvailabilityOfTech(gameData.structures[a])) {
-            document.getElementById(gameData.structures[a].name+'Line').style.display = 'none';
+            document.getElementById(gameData.structures[a].name + 'Line').style.display = 'none';
         } else {
-            document.getElementById(gameData.structures[a].name+'Line').style.display = 'block';
+            document.getElementById(gameData.structures[a].name + 'Line').style.display = 'block';
             if (checkAvailabilityOfRes(gameData.structures[a])) {
-                document.getElementById(gameData.structures[a].name+'But').disabled = false;
+                document.getElementById(gameData.structures[a].name + 'But').disabled = false;
             } else {
-                document.getElementById(gameData.structures[a].name+'But').disabled = true;
+                document.getElementById(gameData.structures[a].name + 'But').disabled = true;
             }
         }
     })
@@ -616,22 +631,28 @@ function updateAccessData() {
     //UPGRADES
     Object.keys(gameData.upgrades).forEach(function (a) {
         if (gameData.upgrades[a].level == 1 || !checkAvailabilityOfTech(gameData.upgrades[a])) {
-            document.getElementById(gameData.upgrades[a].name+'Line').style.display = 'none';
+            document.getElementById(gameData.upgrades[a].name + 'Line').style.display = 'none';
         } else {
-            document.getElementById(gameData.upgrades[a].name+'Line').style.display = 'block';
+            document.getElementById(gameData.upgrades[a].name + 'Line').style.display = 'block';
             if (checkAvailabilityOfRes(gameData.upgrades[a])) {
-                document.getElementById(gameData.upgrades[a].name+'But').disabled = false;
+                document.getElementById(gameData.upgrades[a].name + 'But').disabled = false;
             } else {
-                document.getElementById(gameData.upgrades[a].name+'But').disabled = true;
+                document.getElementById(gameData.upgrades[a].name + 'But').disabled = true;
             }
         }
     })
 
-    //SCOUTING
-    if (gameData.upgrades.exploring.level == 0) {
+    //ORDERS
+    if (gameData.upgrades.exploring.level == 1) {
         document.getElementById('ordersBlock').style.display = 'none';
     } else {
         document.getElementById('ordersBlock').style.display = 'block';
+    }
+    //SCOUTING
+    if (!checkAvailabilityOfRes(gameData.orders.scouting) || gameData.orders.scouting.inProgress) {
+        document.getElementById(gameData.orders.scouting.name + 'But').disabled = true;
+    } else {
+        document.getElementById(gameData.orders.scouting.name + 'But').disabled = false;
     }
 
 }
@@ -664,11 +685,27 @@ function worldTimeTick() {
         gameData.world.winterGlobalDecrease = 1
     }
     if (gameData.world.season >= 3 && gameData.world.season <= 5) {
-        gameData.world.forest += gameData.world.springForestGrownSpeed
+        gameData.world.resources.forest += gameData.world.springForestGrownSpeed
     }
     if (gameData.world.season >= 6 && gameData.world.season <= 8) {
-        gameData.world.animals += gameData.world.summerAnimalGrownSpeed
+        gameData.world.resources.animals += gameData.world.summerAnimalGrownSpeed
     }
+}
+
+//ORDER CIRCLE
+function ordersTick() {
+    if (gameData.orders.scouting.inProgress == true) {
+        gameData.orders.scouting.timeToEnd -= 1;
+    }
+    if (gameData.orders.scouting.timeToEnd <= 0 && gameData.orders.scouting.inProgress == true) {
+        gameData.orders.scouting.inProgress = false;
+        gameData.world.resources.forest += gameData.orders.scouting.effect.baseReveal + Math.floor(Math.random() * gameData.orders.scouting.effect.rndReveal)
+        gameData.world.resources.lands += gameData.orders.scouting.effect.baseReveal + Math.floor(Math.random() * gameData.orders.scouting.effect.rndReveal)
+        gameData.world.resources.animals += gameData.orders.scouting.effect.baseReveal + Math.floor(Math.random() * gameData.orders.scouting.effect.rndReveal)
+        gameData.world.resources.rocks += gameData.orders.scouting.effect.baseReveal + Math.floor(Math.random() * gameData.orders.scouting.effect.rndReveal)
+    }
+
+
 }
 
 function seasonChange() {
@@ -717,7 +754,6 @@ function seasonChange() {
     }
 }
 
-
 //MAIN LOOP
 var mainGameLoop = window.setInterval(function () {
     resourcePerTick(gameData.resources.gold)
@@ -725,21 +761,8 @@ var mainGameLoop = window.setInterval(function () {
     resourcePerTick(gameData.resources.wood)
     resourcePerTick(gameData.resources.stone)
     worldTimeTick()
+    ordersTick()
 }, 1000)
-
-//SAVE AND LOAD
-var saveGameLoop = window.setInterval(function () {
-    localStorage.setItem('goldMinerSave', JSON.stringify(gameData))
-}, 5000)
-
-saveData = JSON.parse(localStorage.getItem("goldMinerSave"))
-if (saveData !== null) {
-    gameData = saveData
-    updateGameData()
-} else {
-    resetGameData()
-}
-addMessage("WELCOME TO FEELSCLICKERMAN!")
 
 //UTILS
 function prettify(input, digits=1) {
@@ -762,17 +785,34 @@ function getRandomUnit() {
     }
 }
 
-function getCost(obj){
-    var costString="Cost: "
+function getCost(obj) {
+    var costString = "Cost: "
     Object.keys(obj.reqResources).forEach(function (a) {
-        if (obj.reqResources[a] > 0 && a!="worker")
-            costString+=obj.reqResources[a]+ " "+a.capitalize()+" "
+        if (obj.reqResources[a] > 0 && a != "worker")
+            costString += obj.reqResources[a] + " " + a.capitalize() + " "
     })
     return costString
 }
 
+function createObject(obj) {
+    Object.keys(obj.reqResources).forEach(function (a) {
+        if (obj.reqResources[a] > 0 && obj.reqResources[a] <= getResourceTotal(a)) {
+            setResourceTotal(a, getResourceTotal(a) - obj.reqResources[a])
+            if (obj.reqResourcesMod)
+                if (obj.reqResourcesMod[a])
+                    obj.reqResources[a] *= obj.reqResourcesMod[a]
+        }
+    })
+    if (obj.type != 'upgrade') {
+        obj.total += 1
+    } else {
+        obj.level = 1
+    }
+    updateGameData()
+}
+
 function checkAvailabilityOfRes(obj) {
-    var isAvailable=true;
+    var isAvailable = true;
     Object.keys(obj.reqResources).forEach(function (a) {
         if (obj.reqResources[a] > 0 && obj.reqResources[a] > getResourceTotal(a)) {
             isAvailable = false;
@@ -783,31 +823,31 @@ function checkAvailabilityOfRes(obj) {
 }
 
 function checkAvailabilityOfTech(obj) {
-    var isAvailable=true;
-    if (obj.reqUpgrades){
+    var isAvailable = true;
+    if (obj.reqUpgrades) {
         Object.keys(gameData.upgrades).forEach(function (b) {
             Object.keys(obj.reqUpgrades).forEach(function (a) {
-                if (gameData.upgrades[b].name==obj.reqUpgrades[a] && gameData.upgrades[b].level==0) {
+                if (gameData.upgrades[b].name == obj.reqUpgrades[a] && gameData.upgrades[b].level == 0) {
                     isAvailable = false;
                     return;
                 }
             })
         })
     }
-    if (obj.reqUnits){
+    if (obj.reqUnits) {
         Object.keys(gameData.units).forEach(function (b) {
             Object.keys(obj.reqUnits).forEach(function (a) {
-                if (gameData.units[b].name==obj.reqUnits[a] && gameData.units[b].total==0) {
+                if (gameData.units[b].name == obj.reqUnits[a] && gameData.units[b].total == 0) {
                     isAvailable = false;
                     return;
                 }
             })
         })
     }
-    if (obj.reqStructures){
+    if (obj.reqStructures) {
         Object.keys(gameData.structures).forEach(function (b) {
             Object.keys(obj.reqStructures).forEach(function (a) {
-                if (gameData.structures[b].name==obj.reqStructures[a] && gameData.structures[b].total==0) {
+                if (gameData.structures[b].name == obj.reqStructures[a] && gameData.structures[b].total == 0) {
                     isAvailable = false;
                     return;
                 }
@@ -819,15 +859,26 @@ function checkAvailabilityOfTech(obj) {
 
 function getResourceTotal(resName) {
     var res
-    if (resName=="worker"){
-        res=gameData.units.worker.total
-    }else {
+    if (resName == "worker") {
+        res = gameData.units.worker.total
+    } else {
         Object.keys(gameData.resources).forEach(function (a) {
             if (gameData.resources[a].name == resName)
                 res = gameData.resources[a].total
         })
     }
     return res
+}
+
+function setResourceTotal(resName, amount) {
+    if (resName == "worker") {
+        gameData.units.worker.total = amount
+    } else {
+        Object.keys(gameData.resources).forEach(function (a) {
+            if (gameData.resources[a].name == resName)
+                gameData.resources[a].total = amount
+        })
+    }
 }
 
 
@@ -846,4 +897,19 @@ function clone(obj) {
 
     return temp;
 }
+
+//STARTUP
+//SAVE AND LOAD
+var saveGameLoop = window.setInterval(function () {
+    localStorage.setItem('goldMinerSave1', JSON.stringify(gameData))
+}, 5000)
+
+saveData = JSON.parse(localStorage.getItem("goldMinerSave1"))
+if (saveData !== null) {
+    gameData = saveData
+    updateGameData()
+} else {
+    resetGameData()
+}
+addMessage("WELCOME TO FEELSCLICKERMAN!")
 

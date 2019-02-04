@@ -30,7 +30,6 @@
     <div id="safekeepingLine"> <div class="upgrade-but-container"><button class="upgrade-but" onclick="getUpgrade(gameData.upgrades.safekeeping)" id="safekeepingBut">Safekeeping</button></div> <div class="upgrade-info-container">Unlock Storages<br><span class="cost-text" id="safekeepingCost"></span></div></div>
     <div id="masonryLine"> <div class="upgrade-but-container"><button class="upgrade-but" onclick="getUpgrade(gameData.upgrades.masonry)" id="masonryBut">Masonry</button></div> <div class="upgrade-info-container">Unlock new structures<br><span class="cost-text" id="masonryCost"></span></div></div>
     <div id="exploringLine"> <div class="upgrade-but-container"><button class="upgrade-but" onclick="getUpgrade(gameData.upgrades.exploring)" id="exploringBut">Exploring</button></div> <div class="upgrade-info-container">Unlock Scouting<br><span class="cost-text" id="exploringCost"></span></div></div>
-    <!--<p><button onclick="buyGoldPerClick()" id="perClickUpgrade">Upgrade Pickaxe (Level 1)</button> Cost: <span id="perClickUpgradeCost">10</span> Gold</p>-->
 </div>
 <div class="block">
     <h2>Units (Population: <span id="populationTotal">0</span>)</h2>
@@ -60,8 +59,10 @@
     </p>
     <div id="ordersBlock">
     <h2>Orders</h2>
-    <p><button id="createScout" onclick="">Send Scout</button>
-        <span class="cost-text" id="scoutCost"></span>
+    <p><button id="scoutingBut" onclick="makeOrder(gameData.orders.scouting)">Send Scout</button>
+        <span class="cost-text" id="scoutingCost"></span><br> <span class="cost-text" id="scoutingTimer"></span></p>
+        <progress id="scoutingProgress" max="100" value="11">
+        </progress>
     </div>
 </div>
 <div class="block">
