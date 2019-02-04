@@ -643,7 +643,7 @@ function updateAccessData() {
     })
 
     //ORDERS
-    if (gameData.upgrades.exploring.level == 1) {
+    if (gameData.upgrades.exploring.level == 0) {
         document.getElementById('ordersBlock').style.display = 'none';
     } else {
         document.getElementById('ordersBlock').style.display = 'block';
