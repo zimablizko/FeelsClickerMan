@@ -532,6 +532,8 @@ function updateGameData() {
     document.getElementById("safekeepingCost").innerHTML = getCost(gameData.upgrades.safekeeping)
     document.getElementById("masonryCost").innerHTML = getCost(gameData.upgrades.masonry)
     document.getElementById("exploringCost").innerHTML = getCost(gameData.upgrades.exploring)
+    //INFO
+    document.getElementById("versionText").innerHTML = gameData.info.version
     //
     updateAccessData()
 }
